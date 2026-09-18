@@ -306,7 +306,7 @@
   .accbar span:active{background:var(--softon)}
 
   /* ---------- 句子模式 ---------- */
-  .modes{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;background:var(--soft);
+  .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--soft);
     border:1px solid var(--line);border-radius:16px;padding:5px;margin-bottom:14px}
   .modes div{display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 4px;
     border-radius:12px;font-size:14px;color:var(--dim);cursor:pointer;transition:.2s;user-select:none}
@@ -374,7 +374,58 @@
   .newbadge .ic{width:22px;height:22px;color:var(--gold)}
   .combo .ic{width:14px;height:14px;color:var(--flame);margin-right:3px}
 
+  /* ---------- 学习卡 ---------- */
+  #study{text-align:center;margin-top:-6px}
+  .stdots{display:flex;justify-content:center;gap:6px;margin:8px 0 20px}
+  .stdots i{width:22px;height:4px;border-radius:2px;background:var(--soft);border:1px solid var(--line)}
+  .stdots i.on{background:linear-gradient(90deg,var(--acc),var(--acc2));border-color:transparent}
+  .stw{font-size:40px;font-weight:700;letter-spacing:1px;line-height:1.2;color:var(--txt);
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;word-break:break-word;
+    animation:pop .3s ease}
+  .stw .acc{color:var(--gold)}
+  .stpos{display:inline-block;margin-top:12px;font-size:12px;color:var(--dim);padding:3px 10px;
+    border-radius:999px;background:var(--soft);border:1px solid var(--line)}
+  .stcn{font-size:21px;font-weight:600;margin-top:14px;line-height:1.5;color:var(--accl)}
+  .stspell{margin-top:14px;display:flex;justify-content:center;gap:4px;flex-wrap:wrap}
+  .stspell span{min-width:26px;padding:5px 4px;border-radius:7px;background:var(--soft);
+    border:1px solid var(--line);font-size:16px;color:var(--dim);
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+  .stnav{display:flex;justify-content:space-between;margin-top:18px;font-size:12px;color:var(--faint)}
+  .stnav a{cursor:pointer;padding:4px 8px;border-radius:8px}
+  .stnav a:active{background:var(--soft)}
+  .stnav a.off{opacity:.3;pointer-events:none}
+  .phase{display:inline-block;font-size:11px;letter-spacing:1px;padding:3px 10px;border-radius:999px;
+    margin-bottom:10px;color:#fff;background:linear-gradient(135deg,var(--acc),var(--acc2))}
+  .phasewrap{text-align:center}
+
+  /* ---------- 短句阅读 ---------- */
+  #read{margin-top:-4px}
+  .rdline{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 2px;padding:6px 4px 2px;
+    font-size:24px;font-weight:600;line-height:1.5;animation:pop .3s ease}
+  .rdline span{padding:1px 5px;border-radius:7px;cursor:pointer;border-bottom:1.5px dashed var(--line);
+    transition:.15s;user-select:none;-webkit-user-select:none}
+  .rdline span:active{transform:scale(.96)}
+  .rdline span.seen{border-bottom-color:var(--acc)}
+  .rdline span.on{background:color-mix(in srgb,var(--acc) 22%,transparent)}
+  .rdgloss{min-height:62px;margin:12px 0 14px;padding:10px 12px;border-radius:14px;background:var(--soft);
+    border:1px solid var(--line);text-align:center;font-size:13px;color:var(--faint);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+  .rdgloss b{font-size:17px;color:var(--txt);font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+  .rdgloss em{font-style:normal;color:var(--faint);font-size:11.5px}
+  .rdgloss span{color:var(--accl);font-size:14px}
+  .rdgloss .rtag{margin:0 0 0 6px;vertical-align:2px}
+  .rdch{display:grid;gap:8px}
+  .rdch div{padding:13px 14px;border-radius:13px;background:var(--soft);border:1.5px solid var(--line);
+    font-size:15px;line-height:1.45;cursor:pointer;transition:.18s;user-select:none}
+  .rdch div:active{transform:scale(.99)}
+  .rdch div.right{border-color:var(--green);background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--txt)}
+  .rdch div.wrong{border-color:var(--red);background:color-mix(in srgb,var(--red) 14%,transparent);animation:sh .32s}
+  .rdch.done div{cursor:default}
+  .rdch.done div:not(.right):not(.wrong){opacity:.45}
+
   @media (max-width:390px){
+    .stw{font-size:34px}
+    .rdline{font-size:21px}
     .cn{font-size:21px}
     .slot{width:27px;height:42px;font-size:23px;line-height:40px}
     .ch{font-size:26px}
@@ -415,6 +466,7 @@
     <div class="modes" id="modes">
       <div class="on" data-m="word">单词拼写</div>
       <div data-m="sent">整句练习</div>
+      <div data-m="read">短句阅读</div>
     </div>
 
     <div class="tabs" id="tabs">
@@ -427,6 +479,11 @@
     <div class="card" id="tab-setup">
       <div class="label">选择词库</div>
       <div class="opts" id="bankOpts"></div>
+      <div class="label">学习方式</div>
+      <div class="opts" id="wayOpts" style="grid-template-columns:repeat(2,1fr)">
+        <div class="opt on" data-l="learn"><b>先学再拼</b><span>每 5 个词先看卡片再拼写</span></div>
+        <div class="opt" data-l="spell"><b>直接拼写</b><span>跳过学习，直接测</span></div>
+      </div>
       <div class="label">难度（挖空比例）</div>
       <div class="opts" id="diffOpts">
         <div class="opt" data-d="0.25"><b>简单</b><span>挖空 25% · 1×</span></div>
@@ -460,6 +517,23 @@
         <div class="opt" data-c="40"><b>40 句</b><span>强化</span></div>
       </div>
       <button class="btn" id="sStartBtn">开始练句子</button>
+    </div>
+
+    <!-- 阅读设置 -->
+    <div class="card hide" id="tab-readset">
+      <div class="label">选择章节</div>
+      <div class="opts" id="rBankOpts"></div>
+      <div class="label">怎么读</div>
+      <div class="rdhow" style="font-size:12.5px;color:var(--dim);line-height:1.75;padding:0 2px">
+        只给西班牙语原句，不给中文。看不懂的词直接点，会显示音标和意思，也可以听整句。读完从 4 个中文意思里选一个，查过词得分少一点。
+      </div>
+      <div class="label">本轮题量</div>
+      <div class="opts" id="rCntOpts">
+        <div class="opt on" data-c="10"><b>10 句</b><span>快速</span></div>
+        <div class="opt" data-c="20"><b>20 句</b><span>标准</span></div>
+        <div class="opt" data-c="40"><b>40 句</b><span>强化</span></div>
+      </div>
+      <button class="btn" id="rStartBtn">开始阅读</button>
     </div>
 
     <!-- 成就 -->
@@ -514,10 +588,24 @@
       </div>
     </div>
     <div class="combo" id="comboTag"></div>
+    <div class="phasewrap"><span class="phase hide" id="phaseTag"></span></div>
     <div class="float" id="floatPt"></div>
     <div class="cn" id="cn"></div>
     <div class="pos" id="pos"></div>
     <div class="word" id="word"></div>
+    <div id="study" class="hide">
+      <div class="stdots" id="stDots"></div>
+      <div class="stw" id="stW"></div>
+      <div class="stpos" id="stPos"></div>
+      <div class="stcn" id="stCn"></div>
+      <div class="stspell" id="stSpell"></div>
+      <div class="stnav"><a id="stPrev">‹ 上一张</a><a id="stSkip">跳过学习，直接拼 ›</a></div>
+    </div>
+    <div id="read" class="hide">
+      <div class="rdline" id="rdLine"></div>
+      <div class="rdgloss" id="rdGloss"></div>
+      <div class="rdch" id="rdCh"></div>
+    </div>
     <div class="accbar" id="accBar">
       <span data-ch="á">á</span><span data-ch="é">é</span><span data-ch="í">í</span><span data-ch="ó">ó</span><span data-ch="ú">ú</span><span data-ch="ü">ü</span><span data-ch="ñ">ñ</span>
     </div>
@@ -551,7 +639,7 @@
       <div><b id="rRate">0%</b><span>正确率</span></div>
     </div>
     <div id="newBadges"></div>
-    <div class="label">错词回顾 <span style="float:right;color:var(--faint)">点击可朗读</span></div>
+    <div class="label"><span id="wrongLabel">错词回顾</span> <span style="float:right;color:var(--faint)">点击可朗读</span></div>
     <div class="list" id="wrongList"></div>
     <button class="btn gold" id="shareBtn">生成成果图 · 保存相册</button>
     <button class="btn ghost hide" id="againBtn">再练错词</button>
@@ -1927,8 +2015,8 @@ vislumbre|f. 微光，迹象
   "use strict";
   const $ = id => document.getElementById(id);
   const KEY = "es-trainer-v1";
-  const VERSION = "v1.0.0";          // 每次改动都会更新，用于确认手机上加载的是不是最新版
-  const BUILD   = "2026-08-18";
+  const VERSION = "v1.1.0";          // 每次改动都会更新，用于确认手机上加载的是不是最新版
+  const BUILD   = "2026-09-19";
 
   const ICONS = {"flame": "M13.5 1.8c.4 3-1.1 4.3-2.2 5.6-1.1 1.3-1.6 2.5-.9 4.1-1.3-.4-2.1-1.6-2.3-3.1C6.6 10.2 5.6 12.1 5.6 14c0 3.7 2.9 6.4 6.4 6.4s6.4-2.7 6.4-6.4c0-4.4-2.8-6.8-4.9-12.2zM12 18.6c-1.6 0-2.8-1.2-2.8-2.7 0-1.4.8-2.2 1.9-3.3.4 1.4 1.3 1.9 2.2 2.6.8.6 1.4 1.2 1.4 2.1 0 .8-1.1 1.3-2.7 1.3z","star": "M12 1.9l2.9 6.2 6.8.9-5 4.7 1.3 6.7L12 17.2l-6 3.2 1.3-6.7-5-4.7 6.8-.9z","spark": "M12 2c.5 4.4 2.4 6.7 6.8 7.4-4.4.7-6.3 3-6.8 7.4-.5-4.4-2.4-6.7-6.8-7.4C10.6 8.7 11.5 6.4 12 2zM18.6 15.2c.3 2.2 1.2 3.3 3.4 3.7-2.2.4-3.1 1.5-3.4 3.7-.3-2.2-1.2-3.3-3.4-3.7 2.2-.4 3.1-1.5 3.4-3.7z","check": "M9.6 17.3L4 11.7l1.9-1.9 3.7 3.7 8.5-8.5L20 6.9z","cross": "M18.7 6.7l-1.4-1.4L12 10.6 6.7 5.3 5.3 6.7l5.3 5.3-5.3 5.3 1.4 1.4 5.3-5.3 5.3 5.3 1.4-1.4-5.3-5.3z","volume": "M4 9.2h3.4L12.6 4.6c.6-.5 1.6-.1 1.6.7v13.4c0 .8-1 1.2-1.6.7L7.4 14.8H4c-.6 0-1-.4-1-1V10.2c0-.6.4-1 1-1zM17 8.3c1.4 1 2.2 2.3 2.2 3.7s-.8 2.7-2.2 3.7v-1.9c.6-.5 1-1.1 1-1.8s-.4-1.3-1-1.8zM17.9 4.6c2.5 1.4 4.1 3.9 4.1 7.4s-1.6 6-4.1 7.4v-2.1c1.6-1.2 2.5-3.1 2.5-5.3s-.9-4.1-2.5-5.3z","bulb": "M12 2c3.7 0 6.6 2.9 6.6 6.5 0 2.3-1.1 4-2.3 5.3-.7.8-1.1 1.3-1.2 2.2H8.9c-.1-.9-.5-1.4-1.2-2.2-1.2-1.3-2.3-3-2.3-5.3C5.4 4.9 8.3 2 12 2zM9 17.6h6v1.6H9zM9.8 20.8h4.4c-.3.9-1.1 1.4-2.2 1.4s-1.9-.5-2.2-1.4z","eye": "M12 4.8c5 0 9 3.4 10.6 7.2C21 15.8 17 19.2 12 19.2S3 15.8 1.4 12C3 8.2 7 4.8 12 4.8zm0 2.7c-2.5 0-4.5 2-4.5 4.5s2 4.5 4.5 4.5 4.5-2 4.5-4.5-2-4.5-4.5-4.5zm0 2.2c1.3 0 2.3 1 2.3 2.3s-1 2.3-2.3 2.3-2.3-1-2.3-2.3 1-2.3 2.3-2.3z","download": "M12 3v9.2l3.4-3.4 1.7 1.7-6.1 6.1-6.1-6.1 1.7-1.7 3.4 3.4V3zM3.6 18.4h16.8V21H3.6z","back": "M11.3 4.2l1.8 1.8-5 5h11.6v2.5H8.1l5 5-1.8 1.8L3.3 12z","refresh": "M12 3.6c4.6 0 8.4 3.8 8.4 8.4h2.6l-3.9 4.4-3.9-4.4h2.6c0-3.2-2.6-5.8-5.8-5.8-1 0-2 .3-2.8.8L7.3 5.1c1.4-.9 3-1.5 4.7-1.5zM4.3 7.6l3.9 4.4H5.6c0 3.2 2.6 5.8 5.8 5.8 1 0 2-.3 2.8-.8l1.9 1.9c-1.4.9-3 1.5-4.7 1.5-4.6 0-8.4-3.8-8.4-8.4H.4z","share": "M12 2.6l5.2 5.2-1.8 1.8-2.2-2.2v8.9h-2.5V7.4L8.6 9.6 6.8 7.8zM4.6 13.4h2.5v5.4h9.8v-5.4h2.5v7.9H4.6z","close": "M18.7 6.7l-1.4-1.4L12 10.6 6.7 5.3 5.3 6.7l5.3 5.3-5.3 5.3 1.4 1.4 5.3-5.3 5.3 5.3 1.4-1.4-5.3-5.3z","trash": "M9 2.6h6l1 1.6h4.4v2.3H3.6V4.2H8zM5.4 8.2h13.2l-1 12.4c-.1.9-.8 1.6-1.7 1.6H8.1c-.9 0-1.6-.7-1.7-1.6zm3.4 2.4v8.2h1.9v-8.2zm4.4 0v8.2h1.9v-8.2z","tier1": "M12 1.6l8.4 3.6v6.2c0 4.9-3.4 9.3-8.4 11-5-1.7-8.4-6.1-8.4-11V5.2zm0 6.2l-3.6 4.2h2.2v2.4h2.8v-2.4h2.2z","tier2": "M12 1.6l8.4 3.6v6.2c0 4.9-3.4 9.3-8.4 11-5-1.7-8.4-6.1-8.4-11V5.2zm0 5l-3.6 4h2.2v1.5h2.8V10.6h2.2zm0 5.2l-3.6 4h2.2v.9h2.8v-.9h2.2z","tier3": "M12 1.6l8.4 3.6v6.2c0 4.9-3.4 9.3-8.4 11-5-1.7-8.4-6.1-8.4-11V5.2zm0 4l-3.4 3.6h1.9v1.1h3v-1.1h1.9zm0 4.3l-3.4 3.6h1.9v1.1h3v-1.1h1.9zm0 4.3l-3.4 3.6h1.9v.8h3v-.8h1.9z","tier4": "M12 1.4l9 5.2v10.8l-9 5.2-9-5.2V6.6zm0 4.6l-1.7 3.6-3.9.5 2.9 2.7-.8 3.8 3.5-1.8 3.5 1.8-.8-3.8 2.9-2.7-3.9-.5z","tier5": "M7.4 2.6h9.2l4.8 6.2L12 21.8 2.6 8.8zm.5 2.4L5.4 8.6h4.1zm8.2 0l-1.6 3.6h4.1zm-4.1.4L9.9 8.6h4.2zM5.6 11h3.6l1.9 6.1zm12.8 0l-5.5 6.1 1.9-6.1zm-6.4 0h-.9l-1.4 4.6.9 2.8.9-2.8z","tier6": "M12 1.2l2.2 6.3 6.3 2.2-6.3 2.2L12 18.2 9.8 11.9 3.5 9.7l6.3-2.2zM19.4 14.6l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1zM4.6 15.8l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z","tier7": "M3 8.2l4.2 3.2L12 3.6l4.8 7.8L21 8.2l-1.8 11.2H4.8zm2.4 13.2h13.2v1.8H5.4z","flag": "M5.4 2.4h2.2v19.2H5.4zM9 3.2h9.4l-1.8 3.6 1.8 3.6H9z","target": "M12 2.4c5.3 0 9.6 4.3 9.6 9.6s-4.3 9.6-9.6 9.6S2.4 17.3 2.4 12 6.7 2.4 12 2.4zm0 2.6c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7-3.1-7-7-7zm0 2.6c2.4 0 4.4 2 4.4 4.4s-2 4.4-4.4 4.4-4.4-2-4.4-4.4 2-4.4 4.4-4.4zm0 2.6c-1 0-1.8.8-1.8 1.8s.8 1.8 1.8 1.8 1.8-.8 1.8-1.8-.8-1.8-1.8-1.8z","books": "M3.4 4.2h4.4v15.6H3.4zM9 4.2h4.4v15.6H9zM14.6 5.4l4.2-1.1 4 15.1-4.2 1.1z","trophy": "M6.8 2.6h10.4v2.2h3.4v3.1c0 2.4-1.7 4.3-4 4.7-.7 1.5-2 2.6-3.4 3v2.6h3.4v2.2H7.4v-2.2h3.4v-2.6c-1.4-.4-2.7-1.5-3.4-3-2.3-.4-4-2.3-4-4.7V4.8h3.4zm-3.4 4.4v1c0 1 .6 1.8 1.5 2.2-.1-.5-.1-1-.1-1.5V7zm13.8 0v1.7c0 .5 0 1-.1 1.5.9-.4 1.5-1.2 1.5-2.2v-1z","bolt": "M13.6 1.8L5.2 13.4h5.2l-.8 8.8 8.4-11.6h-5.2z","calendar": "M7 1.8h2.4v2.4H7zm7.6 0H17v2.4h-2.4zM3.4 3.4h3.6v2.4h2.4V3.4h5.2v2.4H17V3.4h3.6v17.8H3.4zm2.4 6v9.4h12.4V9.4z","calcheck": "M7 1.8h2.4v2.4H7zm7.6 0H17v2.4h-2.4zM3.4 3.4h3.6v2.4h2.4V3.4h5.2v2.4H17V3.4h3.6v17.8H3.4zm2.4 6v9.4h12.4V9.4zm5.1 7.2l-2.9-2.9 1.5-1.5 1.4 1.4 3.9-3.9 1.5 1.5z","medal": "M6.4 1.8h3.2l2.4 5.4 2.4-5.4h3.2l-3 6.6h-5.2zM12 8.8c3.4 0 6.2 2.8 6.2 6.2s-2.8 6.2-6.2 6.2-6.2-2.8-6.2-6.2 2.8-6.2 6.2-6.2zm0 2.6c-2 0-3.6 1.6-3.6 3.6s1.6 3.6 3.6 3.6 3.6-1.6 3.6-3.6-1.6-3.6-3.6-3.6z","mountain": "M12 3.4l4.4 7.4-2.2 2.2-2.2-2.6-2.2 2.6-2.2-2.2zM7.6 13.2l1.9 2.2-2 2.4h9l-2-2.4 1.9-2.2 5.2 7.6H2.4z","globe": "M12 2.4c5.3 0 9.6 4.3 9.6 9.6s-4.3 9.6-9.6 9.6S2.4 17.3 2.4 12 6.7 2.4 12 2.4zm0 2.2c-.9 0-2 1.5-2.6 4h5.2c-.6-2.5-1.7-4-2.6-4zM8.9 10.8c-.1.4-.1.8-.1 1.2s0 .8.1 1.2h6.2c.1-.4.1-.8.1-1.2s0-.8-.1-1.2zm-2.3 0H4.8c-.2.4-.2.8-.2 1.2s0 .8.2 1.2h1.8c-.1-.4-.1-.8-.1-1.2s0-.8.1-1.2zm10.8 0c.1.4.1.8.1 1.2s0 .8-.1 1.2h1.8c.2-.4.2-.8.2-1.2s0-.8-.2-1.2zM12 19.4c.9 0 2-1.5 2.6-4H9.4c.6 2.5 1.7 4 2.6 4zm-4.7-4H5.6c.9 1.7 2.4 3 4.2 3.6-.6-.9-1.1-2.2-1.5-3.6zm9.4 0c-.4 1.4-.9 2.7-1.5 3.6 1.8-.6 3.3-1.9 4.2-3.6zm-9.4-6.8c.4-1.4.9-2.7 1.5-3.6-1.8.6-3.3 1.9-4.2 3.6zm9.4 0h1.7c-.9-1.7-2.4-3-4.2-3.6.6.9 1.1 2.2 1.5 3.6z","moon": "M13.2 1.8c-.9 1.4-1.4 3.1-1.4 4.9 0 5 4.1 9.1 9.1 9.1.5 0 1-.1 1.5-.2-1.5 4.2-5.5 7.2-10.2 7.2-6 0-10.8-4.8-10.8-10.8 0-5.6 4.2-10.2 9.6-10.8z","sunrise": "M12 8.2c2.6 0 4.8 2 5.1 4.6H6.9c.3-2.6 2.5-4.6 5.1-4.6zM10.8 1.8h2.4v4.2h-2.4zM4.9 4.3l1.7 1.7-1.7 1.7-1.7-1.7zm14.2 0l1.7 1.7-1.7 1.7-1.7-1.7zM1.6 11.6h3.4V14H1.6zm17.4 0h3.4V14H19zM3.4 16.4h17.2v2.2H3.4zm2.6 3.8h12v2H6z","route": "M6.2 2.4c2.1 0 3.8 1.7 3.8 3.8 0 2.8-3.8 7-3.8 7s-3.8-4.2-3.8-7c0-2.1 1.7-3.8 3.8-3.8zm0 2.4c-.8 0-1.4.6-1.4 1.4s.6 1.4 1.4 1.4 1.4-.6 1.4-1.4-.6-1.4-1.4-1.4zM17.8 11c2.1 0 3.8 1.7 3.8 3.8 0 2.8-3.8 7-3.8 7S14 17.6 14 14.8c0-2.1 1.7-3.8 3.8-3.8zm0 2.4c-.8 0-1.4.6-1.4 1.4s.6 1.4 1.4 1.4 1.4-.6 1.4-1.4-.6-1.4-1.4-1.4zM10.6 6.6h3.2c1.9 0 3.4 1.5 3.4 3.4h-2.4c0-.6-.4-1-1-1h-3.2zM6.2 14.2h3.2c1.9 0 3.4 1.5 3.4 3.4v1.6h-2.4v-1.6c0-.6-.4-1-1-1H6.2z","gem": "M7.4 2.6h9.2l4.8 6.2L12 21.8 2.6 8.8zm.6 2.4L5.6 8.4h4.2zm8 0l1.6 3.4h4.2zm-4 .2L10.4 8.4h3.2zM5.4 10.8h3.9l2 6.4zm13.2 0l-5.9 6.4 2-6.4zm-6.6 0h-.6l-1.5 4.8.9 2.9.9-2.9z","checkbadge": "M12 2.2l2.6 1.9 3.2-.3.9 3.1 2.7 1.8-1.3 2.9 1.3 2.9-2.7 1.8-.9 3.1-3.2-.3L12 21l-2.6-1.9-3.2.3-.9-3.1-2.7-1.8 1.3-2.9-1.3-2.9L5.3 6.9l.9-3.1 3.2.3zm-1.3 12.9l5.6-5.6-1.7-1.7-3.9 3.9-1.9-1.9-1.7 1.7z","cal3": "M7 1.8h2.4v2.4H7zm7.6 0H17v2.4h-2.4zM3.4 3.4h3.6v2.4h2.4V3.4h5.2v2.4H17V3.4h3.6v17.8H3.4zm2.4 6v9.4h12.4V9.4zm2.2 3.2h2.2v2.2H8zm3.9 0h2.2v2.2h-2.2zm3.9 0H18v2.2h-2.2z","grid": "M3.4 3.4h7.2v7.2H3.4zm10 0h7.2v7.2h-7.2zm-10 10h7.2v7.2H3.4zm10 0h7.2v7.2h-7.2z","play": "M6.4 3.2L20 12 6.4 20.8z","list": "M3.4 4.6h3.2v3.2H3.4zm5.4 .4h11.8v2.4H8.8zM3.4 10.4h3.2v3.2H3.4zm5.4 .4h11.8v2.4H8.8zM3.4 16.2h3.2v3.2H3.4zm5.4 .4h11.8V19H8.8z","home": "M12 2.4L22 11l-1.6 1.8-1.2-1v10.2H4.8V11.8l-1.2 1L2 11z"};
   ICONS.palette = "M12 2.6c5.2 0 9.4 3.7 9.4 8.4 0 2.8-2.2 4.6-5 4.6h-1.6c-1.2 0-2.2.9-2.2 2.1 0 .5.2.9.4 1.3.3.4.5.8.5 1.2 0 .6-.5 1.1-1.1 1.1-5.2 0-9.8-4.3-9.8-9.7C2.6 6.5 6.8 2.6 12 2.6zM6.9 10.5a1.75 1.75 0 100 3.5 1.75 1.75 0 000-3.5zm3.2-4.3a1.75 1.75 0 100 3.5 1.75 1.75 0 000-3.5zm4.9 0a1.75 1.75 0 100 3.5 1.75 1.75 0 000-3.5zm3.4 3.7a1.7 1.7 0 100 3.4 1.7 1.7 0 000-3.4z";
@@ -2243,7 +2331,7 @@ vislumbre|f. 微光，迹象
       no++; combo = 0;
       sfx("no");
       $("msg").innerHTML = '<span class="bad">' + ic("cross",15) + '再看一遍这句</span>';
-      addWrong({w:cur.en, cn:cur.cn});
+      addWrong({w:cur.en, cn:cur.cn, src:cur});
     }
     $("okBtn").innerHTML = ic("play",14) + "下一句";
     speak(cur.en);
@@ -2252,14 +2340,27 @@ vislumbre|f. 微光，迹象
 
   /* ================= 首页选项 ================= */
   let bankKey = "a12", diff = 0.45, cnt = 20;
+  let learnWay = S.learnWay === "spell" ? "spell" : "learn";
+  if(!S.seen) S.seen = {};
   const bankOpts = $("bankOpts");
-  Object.keys(BANKS).forEach((k,i)=>{
-    const b = BANKS[k], d = document.createElement("div");
-    d.className = "opt" + (i===0 ? " on" : "");
-    d.dataset.b = k;
-    d.innerHTML = "<b>"+b.short+"</b><span>"+b.list.length+" 词</span>";
-    bankOpts.appendChild(d);
-  });
+  function seenCount(k){
+    let n = 0;
+    BANKS[k].list.forEach(x=>{ if(S.seen[x.w]) n++; });
+    return n;
+  }
+  function renderBanks(){
+    bankOpts.innerHTML = "";
+    Object.keys(BANKS).forEach(k=>{
+      const b = BANKS[k], d = document.createElement("div"), n = seenCount(k);
+      d.className = "opt chap" + (k === bankKey ? " on" : "");
+      d.dataset.b = k;
+      d.innerHTML = "<b>"+b.short+"</b><span>已学 "+n+" / "+b.list.length+"</span>" +
+        '<i style="width:'+Math.round(n/b.list.length*100)+'%"></i>';
+      bankOpts.appendChild(d);
+    });
+  }
+  renderBanks();
+  [].forEach.call($("wayOpts").children, c=>c.classList.toggle("on", c.dataset.l === learnWay));
   function pick(box, cb){
     box.addEventListener("click", e=>{
       const t = e.target.closest(".opt");
@@ -2271,6 +2372,7 @@ vislumbre|f. 微光，迹象
   pick(bankOpts, t => bankKey = t.dataset.b);
   pick($("diffOpts"), t => diff = parseFloat(t.dataset.d));
   pick($("cntOpts"),  t => cnt  = parseInt(t.dataset.c,10));
+  pick($("wayOpts"),  t => { learnWay = t.dataset.l; S.learnWay = learnWay; save(); });
 
   // 句库选项
   const sBankOpts = $("sBankOpts");
@@ -2298,12 +2400,14 @@ vislumbre|f. 微光，迹象
     t.classList.add("on");
     mode = t.dataset.m;
     const first = $("tabs").children[0];
-    first.textContent = mode === "sent" ? "开始练句" : "开始练习";
+    first.textContent = mode === "sent" ? "开始练句" : mode === "read" ? "开始阅读" : "开始练习";
     [].forEach.call($("tabs").children, c=>c.classList.remove("on"));
     first.classList.add("on");
-    ["setup","sentset","ach","rec"].forEach(k=>
-      $("tab-"+k).classList.toggle("hide", k !== (mode === "sent" ? "sentset" : "setup")));
+    ["setup","sentset","readset","ach","rec"].forEach(k=>
+      $("tab-"+k).classList.toggle("hide", k !== setupTab()));
     if(mode === "sent") renderChapters();
+    if(mode === "read") renderReadChapters();
+    if(mode === "word") renderBanks();
   });
 
   $("sStartBtn").onclick = ()=>{
@@ -2326,11 +2430,200 @@ vislumbre|f. 微光，迹象
     if(!t) return;
     [].forEach.call($("tabs").children, c=>c.classList.remove("on"));
     t.classList.add("on");
-    const want = t.dataset.t === "setup" && mode === "sent" ? "sentset" : t.dataset.t;
-    ["setup","sentset","ach","rec"].forEach(k=>$("tab-"+k).classList.toggle("hide", k!==want));
+    const want = t.dataset.t === "setup" ? setupTab() : t.dataset.t;
+    ["setup","sentset","readset","ach","rec"].forEach(k=>$("tab-"+k).classList.toggle("hide", k!==want));
     if(t.dataset.t === "ach") renderAch();
     if(t.dataset.t === "rec") renderRec();
   });
+
+  function setupTab(){ return mode === "sent" ? "sentset" : mode === "read" ? "readset" : "setup"; }
+  function curText(){ return cur ? (mode === "word" ? cur.w : cur.en) : ""; }
+
+  /* ================= 短句阅读 ================= */
+  let rGroup = "all", rCnt = 10, looked = false;
+  function readDone(id){
+    let n = 0;
+    groupList(id).forEach(x=>{ if(S.readOK && S.readOK[x.en]) n++; });
+    return n;
+  }
+  function renderReadChapters(){
+    const box = $("rBankOpts");
+    box.innerHTML = "";
+    SGROUPS.forEach(g=>{
+      const total = groupList(g.id).length, done = readDone(g.id);
+      const d = document.createElement("div");
+      d.className = "opt chap" + (g.id === rGroup ? " on" : "");
+      d.dataset.g = g.id;
+      d.innerHTML = "<b>"+g.n+"</b><span>"+done+" / "+total+"</span>" +
+        '<i style="width:'+(total ? Math.round(done/total*100) : 0)+'%"></i>';
+      box.appendChild(d);
+    });
+  }
+  renderReadChapters();
+  pick($("rBankOpts"), t => rGroup = t.dataset.g);
+  pick($("rCntOpts"),  t => rCnt = parseInt(t.dataset.c,10));
+
+  function choicesFor(item){
+    const same = shuffle(SENTS.filter(x=>x.t === item.t && x.cn !== item.cn));
+    const other = shuffle(SENTS.filter(x=>x.t !== item.t && x.cn !== item.cn));
+    const pool = same.concat(other), seenCn = {}, out = [];
+    seenCn[item.cn] = 1;
+    for(let i=0;i<pool.length && out.length<3;i++){
+      if(seenCn[pool[i].cn]) continue;
+      seenCn[pool[i].cn] = 1; out.push(pool[i].cn);
+    }
+    return shuffle(out.concat([item.cn]));
+  }
+
+  function renderRead(){
+    if(idx >= queue.length) return finish();
+    cur = queue[idx];
+    answered = false; looked = false; usedHint = false;
+    $("msg").innerHTML = "";
+    $("okBtn").innerHTML = ic("eye",16) + "读完了？在上面选一个意思";
+    $("okBtn").style.opacity = ".55";
+    updateHUD();
+    $("cn").textContent = "";
+    $("pos").textContent = "读句子，选出中文意思 · 不认识的词点一下";
+    $("rdLine").innerHTML = cur.ws.map((w,i)=>'<span data-i="'+i+'">'+esc(w.w)+'</span>').join("");
+    $("rdLine").style.animation = "none"; void $("rdLine").offsetWidth; $("rdLine").style.animation = "";
+    $("rdGloss").innerHTML = "点句子里的词查看意思";
+    const ch = choicesFor(cur);
+    $("rdCh").className = "rdch";
+    $("rdCh").innerHTML = ch.map(c=>'<div data-c="'+esc(c)+'">'+esc(c)+'</div>').join("");
+    $("expl").classList.add("hide"); $("expl").innerHTML = "";
+    if(autoSpeak) speak(cur.en);
+    if(queue[idx+1]) preload(queue[idx+1].en);
+  }
+
+  function lookWord(el){
+    const i = +el.dataset.i, w = cur.ws[i];
+    if(!answered) looked = true;
+    [].forEach.call($("rdLine").children, c=>c.classList.remove("on"));
+    el.classList.add("on", "seen");
+    const R = ROLES[w.r];
+    $("rdGloss").innerHTML = '<div><b>'+esc(w.w.replace(/[¿?¡!.,;:]/g,""))+'</b>' +
+      (R ? '<i class="rtag" style="background:'+R.c+';font-style:normal">'+R.n+'</i>' : '') + '</div>' +
+      (w.ipa ? '<em>/'+esc(w.ipa)+'/</em>' : '') + '<span>'+esc(w.gl)+'</span>';
+    speak(w.w.replace(/[¿?¡!.,;:]/g,""));
+  }
+
+  function answerRead(el, give){
+    if(answered) return;
+    answered = true;
+    const right = !give && el && el.dataset.c === cur.cn;
+    $("rdCh").classList.add("done");
+    [].forEach.call($("rdCh").children, c=>{
+      if(c.dataset.c === cur.cn) c.classList.add("right");
+    });
+    if(el && !right) el.classList.add("wrong");
+    buildExpl(null);
+    $("okBtn").style.opacity = "";
+    $("okBtn").innerHTML = ic("play",14) + "下一句";
+    if(right){
+      ok++; combo++;
+      if(combo > roundBestCombo) roundBestCombo = combo;
+      if(!S.readOK) S.readOK = {};
+      if(!looked && !S.readOK[cur.en]){ S.readOK[cur.en] = 1; save(); }
+      const gain = (looked ? 10 : 15) + Math.min(combo,6)*2;
+      roundPt += gain;
+      floatPoint(gain);
+      sfx("ok");
+      $("msg").innerHTML = '<span class="good">' + ic("check",16) + (looked ? "读对了（查过词）" : "读对了，没查词") + '</span>';
+    }else{
+      no++; combo = 0;
+      sfx("no");
+      $("msg").innerHTML = '<span class="bad">' + ic("cross",15) + '意思是：' + esc(cur.cn) + '</span>';
+      addWrong({w:cur.en, cn:cur.cn, src:cur});
+    }
+    speak(cur.en);
+    updateHUD();
+  }
+
+  $("rdLine").addEventListener("click", e=>{
+    const t = e.target.closest("span[data-i]");
+    if(t) lookWord(t);
+  });
+  $("rdCh").addEventListener("click", e=>{
+    const t = e.target.closest("div[data-c]");
+    if(t) answerRead(t);
+  });
+  $("rStartBtn").onclick = ()=>{
+    unlockAudio();
+    mode = "read";
+    const all = shuffle(groupList(rGroup));
+    const g = SGROUPS.filter(x=>x.id===rGroup)[0];
+    start(all.slice(0, rCnt), "阅读·" + (g ? g.n : ""));
+  };
+
+  /* ================= 先学后拼：学习卡 ================= */
+  let studyOn = false, phase = "spell", studiedTo = 0, stGroup = [], stI = 0;
+  const GROUP = 5;
+  function markAcc(w){
+    return esc(w).replace(/([áéíóúüñÁÉÍÓÚÜÑ])/g,'<span class="acc">$1</span>');
+  }
+  function showPhase(t){
+    const el = $("phaseTag");
+    el.textContent = t || "";
+    el.classList.toggle("hide", !t);
+  }
+  function enterStudy(){
+    phase = "study";
+    stGroup = queue.slice(idx, idx + GROUP);
+    stI = 0;
+    studiedTo = idx + stGroup.length;
+    $("word").classList.add("hide");
+    $("accBar").classList.add("hide");
+    $("hintBtn").classList.add("hide");
+    $("skipBtn").classList.add("hide");
+    $("study").classList.remove("hide");
+    $("cn").classList.add("hide"); $("pos").classList.add("hide");
+    try{ const el = typedEl(); if(el) el.blur(); }catch(e){}
+    renderStudy();
+  }
+  function renderStudy(){
+    cur = stGroup[stI];
+    answered = false;
+    const g = Math.floor(idx / GROUP) + 1, gs = Math.ceil(queue.length / GROUP);
+    showPhase("学习 · 第 " + g + "/" + gs + " 组");
+    $("stDots").innerHTML = stGroup.map((x,i)=>'<i class="'+(i<=stI?"on":"")+'"></i>').join("");
+    $("stW").innerHTML = markAcc(cur.w);
+    $("stW").style.animation = "none"; void $("stW").offsetWidth; $("stW").style.animation = "";
+    const m = cur.cn.match(/^((?:[a-z]+\.\s*)+)(.*)$/);
+    $("stPos").textContent = m ? m[1].trim() : "";
+    $("stPos").classList.toggle("hide", !m);
+    $("stCn").textContent = m ? m[2].trim() : cur.cn;
+    $("stSpell").innerHTML = cur.w.split("").map(c=>'<span>'+(c===" "?"&nbsp;":esc(c))+'</span>').join("");
+    $("cn").textContent = ""; $("pos").textContent = "";
+    $("msg").innerHTML = '<span style="color:var(--faint);font-size:12.5px">看清拼写，跟读一遍，记住了就翻下一张</span>';
+    $("stPrev").classList.toggle("off", stI === 0);
+    const last = stI === stGroup.length - 1;
+    $("okBtn").innerHTML = last ? ic("play",16) + "开始拼写这 " + stGroup.length + " 个" : "下一张 ›";
+    if(!S.seen[cur.w]){ S.seen[cur.w] = today(); save(); }
+    $("ringTxt").textContent = "学" + (stI+1) + "/" + stGroup.length;
+    speak(cur.w);
+    if(stGroup[stI+1]) preload(stGroup[stI+1].w);
+  }
+  function leaveStudy(){
+    phase = "spell";
+    // 拼写时打乱本组顺序，别按刚才看卡片的顺序默写
+    const part = shuffle(queue.slice(idx, studiedTo));
+    for(let i=0;i<part.length;i++) queue[idx+i] = part[i];
+    $("study").classList.add("hide");
+    $("cn").classList.remove("hide"); $("pos").classList.remove("hide");
+    $("word").classList.remove("hide");
+    $("accBar").classList.remove("hide");
+    $("hintBtn").classList.remove("hide");
+    $("skipBtn").classList.remove("hide");
+    render();
+  }
+  function nextStudy(){
+    if(stI < stGroup.length - 1){ stI++; renderStudy(); }
+    else leaveStudy();
+  }
+  $("stPrev").onclick = ()=>{ if(stI > 0){ stI--; renderStudy(); } };
+  $("stSkip").onclick = ()=>{ studyOn = false; leaveStudy(); };
+  $("stW").onclick = ()=> speak(cur.w);
 
   /* ================= 会话状态 ================= */
   let queue = [], idx = 0, ok = 0, no = 0, cur = null, blanks = [], answered = false;
@@ -2357,15 +2650,24 @@ vislumbre|f. 微光，迹象
     return shuffle(pool).slice(0,n).sort((a,b)=>a-b);
   }
 
-  function start(list, label){
+  function start(list, label, study){
     queue = list; idx = 0; ok = 0; no = 0;
-    $("word").classList.toggle("hide", mode === "sent");
-    $("sent").classList.toggle("hide", mode !== "sent");
-    $("hintBtn").classList.toggle("hide", mode === "sent" && sWay === "build");
-    $("accBar").classList.toggle("hide", mode === "sent" && sWay === "build");
+    studyOn = mode === "word" && !!study; phase = "spell"; studiedTo = 0;
+    showPhase("");
+    $("study").classList.add("hide");
+    $("cn").classList.toggle("hide", mode === "read"); $("pos").classList.remove("hide");
+    $("skipBtn").classList.remove("hide");
+    $("okBtn").style.opacity = "";
+    $("word").classList.toggle("hide", mode !== "word");
+    $("sent").classList.toggle("hide", mode === "word");
+    $("read").classList.toggle("hide", mode !== "read");
+    ["ansLine","chipBox","dictIn"].forEach(k=>$(k).classList.toggle("hide", mode === "read"));
+    $("hintBtn").classList.toggle("hide", mode === "read" || (mode === "sent" && sWay === "build"));
+    $("accBar").classList.toggle("hide", mode === "read" || (mode === "sent" && sWay === "build"));
     roundPt = 0; combo = 0; roundBestCombo = 0; roundHints = 0; roundWrong = [];
     $("qBank").textContent = label || BANKS[bankKey].short;
-    $("qDiff").textContent = DIFFNAME[String(diff)] || "";
+    $("qDiff").textContent = mode === "read" ? "阅读" : mode === "sent" ? (sWay === "dict" ? "听写" : "词块")
+      : (studyOn ? "先学 · " : "") + (DIFFNAME[String(diff)] || "");
     $("home").classList.add("hide");
     $("done").classList.add("hide");
     $("quiz").classList.remove("hide");
@@ -2375,7 +2677,10 @@ vislumbre|f. 微光，迹象
 
   function render(){
     if(mode === "sent") return renderSent();
+    if(mode === "read") return renderRead();
     if(idx >= queue.length) return finish();
+    if(studyOn && idx >= studiedTo) return enterStudy();
+    showPhase(studyOn ? "拼写 · 刚学的词" : "");
     cur = queue[idx];
     answered = false; usedHint = false;
     $("msg").innerHTML = "";
@@ -2487,6 +2792,7 @@ vislumbre|f. 微光，迹象
     const q = $("quiz");
     q.addEventListener("click", e=>{
       if(e.target.closest("button, .tool, a, input, textarea, .chip")) return;
+      if(mode === "read" || phase === "study") return;
       if(mode === "sent"){
         if(sWay === "dict" && !answered){ try{ $("dictIn").focus(); }catch(err){} }
         return;
@@ -2504,6 +2810,7 @@ vislumbre|f. 微光，迹象
       });
       // 点完再补一次聚焦，键盘万一收起也会重新弹出（click 属于用户手势）
       b.addEventListener("click", ()=>{
+        if(mode === "read" || phase === "study") return;
         if(mode === "sent"){
           if(sWay === "dict" && !answered){ try{ $("dictIn").focus(); }catch(err){} }
           return;
@@ -2561,6 +2868,8 @@ vislumbre|f. 微光，迹象
     if(now - lastSubmit < 150) return;
     lastSubmit = now;
     if(mode === "sent") return submitSent();
+    if(mode === "read"){ if(answered){ idx++; render(); } return; }
+    if(phase === "study") return nextStudy();
     if(answered){ idx++; render(); return; }
 
     const ss = slots(), v = typed();
@@ -2599,7 +2908,7 @@ vislumbre|f. 微光，迹象
   }
 
   function addWrong(item){
-    if(!wrongBook.some(x => x.w === item.w)) wrongBook.push(item);
+    if(mode === "word" && !wrongBook.some(x => x.w === item.w)) wrongBook.push(item);
     if(!roundWrong.some(x => x.w === item.w)) roundWrong.push(item);
     refreshWrongBtn();
   }
@@ -2612,6 +2921,7 @@ vislumbre|f. 微光，迹象
   /* ================= 结算 ================= */
   let lastRound = null;
   function finish(){
+    phase = "spell"; showPhase(""); $("okBtn").style.opacity = "";
     $("quiz").classList.add("hide");
     $("done").classList.remove("hide");
     window.scrollTo(0,0);
@@ -2644,9 +2954,11 @@ vislumbre|f. 微光，迹象
       S.learned += total; S.correct += ok;
       if(roundBestCombo > S.bestCombo) S.bestCombo = roundBestCombo;
       lastRound = {date:t, bank:mode === "sent" ? "sent" : bankKey,
-                   bankName:mode === "sent" ? ("句子·"+(SGROUPS.filter(x=>x.id===sGroup)[0]||{}).n) : BANKS[bankKey].short,
+                   bankName:mode === "sent" ? ("句子·"+(SGROUPS.filter(x=>x.id===sGroup)[0]||{}).n)
+                          : mode === "read" ? ("阅读·"+(SGROUPS.filter(x=>x.id===rGroup)[0]||{}).n) : BANKS[bankKey].short,
                    diff:diff,
-                   diffName:mode === "sent" ? (sWay === "dict" ? "听写" : "词块") : (DIFFNAME[String(diff)]||""),
+                   diffName:mode === "sent" ? (sWay === "dict" ? "听写" : "词块") : mode === "read" ? "阅读"
+                          : (studyOn ? "先学·" : "") + (DIFFNAME[String(diff)]||""),
                    total:total, correct:ok, wrong:no,
                    rate:rate, points:roundPt, combo:roundBestCombo, hints:roundHints, ts:Date.now()};
       S.records.push(lastRound);
@@ -2684,11 +2996,15 @@ vislumbre|f. 微光，迹象
         const r = document.createElement("div");
         r.className = "row";
         r.innerHTML = "<b>"+item.w+"</b><span>"+item.cn+"</span>";
+        if(item.src) r.innerHTML = '<b style="white-space:normal;text-align:left;flex-shrink:1">'+esc(item.w)+'</b><span>'+esc(item.cn)+'</span>';
         r.onclick = () => speak(item.w);
         box.appendChild(r);
       });
     }
-    $("againBtn").classList.toggle("hide", wrongBook.length === 0);
+    const sentWrong = mode !== "word" && roundWrong.some(x=>x.src);
+    $("againBtn").classList.toggle("hide", mode === "word" ? wrongBook.length === 0 : !sentWrong);
+    $("againBtn").innerHTML = ic("refresh",16) + (mode === "word" ? "再练错词" : "再练错句");
+    $("wrongLabel").textContent = mode === "word" ? "错词回顾" : "错句回顾";
     refreshHeader();
   }
 
@@ -3173,8 +3489,13 @@ vislumbre|f. 微光，迹象
   $("startBtn").onclick = ()=>{
     unlockAudio();
     mode = "word";
-    const all = shuffle(BANKS[bankKey].list);
-    start(cnt ? all.slice(0, cnt) : all);
+    const list = BANKS[bankKey].list;
+    let all = shuffle(list);
+    if(learnWay === "learn"){
+      // 没学过的词排前面
+      all = shuffle(list.filter(x=>!S.seen[x.w])).concat(shuffle(list.filter(x=>S.seen[x.w])));
+    }
+    start(cnt ? all.slice(0, cnt) : all, null, learnWay === "learn");
   };
   $("wrongBtn").onclick = ()=>{
     unlockAudio();
@@ -3186,10 +3507,11 @@ vislumbre|f. 微光，迹象
   $("okBtn").onclick   = submit;
   $("playBtn").onclick = ()=>{
     unlockAudio(); failStreak = 0; audioTip("");
-    speak(cur ? (mode === "sent" ? cur.en : cur.w) : "");
+    speak(curText());
   };
   $("hintBtn").onclick = ()=>{
     if(answered || !cur) return;
+    if(mode === "read" || phase === "study") return;
     if(mode === "sent"){
       if(sWay !== "dict") return;
       usedHint = true; roundHints++;
@@ -3207,10 +3529,12 @@ vislumbre|f. 微光，迹象
   };
   $("skipBtn").onclick = ()=>{
     if(answered || !cur) return;
+    if(mode === "read"){ answerRead(null, true); return; }
+    if(phase === "study") return;
     if(mode === "sent"){
       answered = true;
       no++; combo = 0;
-      addWrong({w:cur.en, cn:cur.cn});
+      addWrong({w:cur.en, cn:cur.cn, src:cur});
       if(sWay === "dict") $("dictIn").value = cur.en;
       else{
         $("ansLine").innerHTML = cur.ws.map(w=>'<span class="chip pick">'+esc(w.w)+'</span>').join("");
@@ -3237,7 +3561,7 @@ vislumbre|f. 微光，迹象
     unlockAudio();
     accent = accent === 2 ? 1 : 2;
     $("accentBtn").textContent = accent === 2 ? "西班牙" : "拉美";
-    if(cur) speak(mode === "sent" ? cur.en : cur.w);
+    if(cur) speak(curText());
   };
   $("sfxBtn").onclick = ()=>{
     S.sfx = !S.sfx; save(); sfxLabel();
@@ -3249,7 +3573,11 @@ vislumbre|f. 微光，迹象
   };
   $("quitBtn").onclick  = finish;
   $("againBtn").onclick = ()=>{
-    mode = "word";
+    if(mode !== "word"){
+      const l = shuffle(roundWrong.filter(x=>x.src).map(x=>x.src));
+      if(l.length) start(l, (mode === "read" ? "阅读" : "句子") + "·错句");
+      return;
+    }
     const l = shuffle(wrongBook);
     wrongBook = []; refreshWrongBtn();
     start(l, "错词本");
@@ -3258,6 +3586,8 @@ vislumbre|f. 微光，迹象
     $("done").classList.add("hide");
     $("home").classList.remove("hide");
     if(mode === "sent") renderChapters();
+    if(mode === "read") renderReadChapters();
+    renderBanks();
     refreshWrongBtn(); refreshHeader();
     window.scrollTo(0,0);
   };
